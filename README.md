@@ -145,6 +145,9 @@ external packages:
 emacs -Q --batch -L . -L tests -l tests/run-tests.el
 ```
 
+CI covers Emacs 27.2, 28.2, 29.4, 30.2, and 31.1 on Linux. The package
+continues to support Emacs 27.1 and later.
+
 See [CONTRIBUTING.md](CONTRIBUTING.md) for style, safety, and test guidance.
 The concise Info manual source is [kubect.texi](kubect.texi).
 
