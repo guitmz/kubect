@@ -23,10 +23,6 @@ jobs:
           version: ${{ matrix.emacs_version }}
       - name: Run ERT suite
         run: emacs -Q --batch -L . -L tests -l tests/run-tests.el
-      - name: Validate the Info manual source
-        run: >-
-          emacs -Q --batch --eval
-          "(progn (require 'texinfmt) (with-temp-buffer (insert-file-contents \"kubect.texi\") (texinfo-format-buffer)))"
       - name: Check trailing whitespace and final newlines
         run: |
           ! git grep -nI '[[:blank:]]$'

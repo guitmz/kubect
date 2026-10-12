@@ -8,6 +8,8 @@ report, log, stream, and compilation buffers show the underlying invocation.
 Kubect does not bundle credentials, contact a service, or depend on a specific
 cluster, namespace, project directory, or external Emacs package.
 
+This project was developed with AI assistance for tests, and documentation, with human review required for every change.
+
 ## Comparison
 
 - [Kubel](https://github.com/abrochard/kubel) provides a focused resource browser with per buffer context and namespace selection, while Kubect adds asynchronous reports, incident workflows, and mandatory confirmations for state changes and connection opening.
@@ -56,9 +58,31 @@ With `use-package`:
   :bind ("C-c k" . kubect-prefix-map))
 ```
 
-For a package manager, install the repository by that manager's documented
-local or VCS mechanism, then `(require 'kubect)`.  Kubect does not require a
-particular package manager or archive.
+With Elpaca:
+
+```elisp
+(elpaca (kubect :host github :repo "guitmz/kubect")
+  (require 'kubect))
+```
+
+With Emacs 29 or later and the built in `package-vc` command:
+
+```elisp
+(require 'package)
+(package-vc-install '(kubect :url "https://github.com/guitmz/kubect.git"))
+(require 'kubect)
+```
+
+With straight.el:
+
+```elisp
+(straight-use-package
+ '(kubect :type git :host github :repo "guitmz/kubect"))
+(require 'kubect)
+```
+
+Kubect does not require a particular package manager or archive.  After the
+first installation, bind `kubect-prefix-map` as shown above.
 
 ## Quick start
 
@@ -148,7 +172,6 @@ emacs -Q --batch -L . -L tests -l tests/run-tests.el
 CI covers Emacs 28.2, 29.4, 30.2, and 31.1 on Linux.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for style, safety, and test guidance.
-The concise Info manual source is [kubect.texi](kubect.texi).
 
 ## License
 
