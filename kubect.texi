@@ -1,0 +1,68 @@
+\input texinfo
+@setfilename kubect.info
+@settitle Kubect
+
+@dircategory Emacs
+@direntry
+* Kubect: (kubect). Kubernetes workflows from Emacs.
+@end direntry
+
+@titlepage
+@title Kubect
+@subtitle Kubernetes workflows from Emacs
+@author Guilherme Thomazi Bonicontro
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top
+@top Kubect
+@end ifnottex
+
+Kubect is a text focused Emacs interface for Kubernetes.  It delegates cluster
+interaction to @code{kubectl}, keeps each browser session scoped to its context
+and namespace, and confirms actions that change state or open connections.
+
+@menu
+* Installation::
+* Basic Use::
+* Safety::
+* Configuration::
+@end menu
+
+@node Installation
+@chapter Installation
+
+Kubect requires Emacs 27.1 or later and @code{kubectl}.  Add the package
+directory to @code{load-path}, then load it with @code{(require 'kubect)}.
+Bind @code{kubect-prefix-map} to a convenient key.
+
+@node Basic Use
+@chapter Basic Use
+
+Run @code{kubect} to open a browser.  In a session buffer, @kbd{g} refreshes,
+@key{RET} views a resource, @kbd{l} opens logs, @kbd{C-c f} filters a table
+column, and @kbd{?} opens a command
+menu when Transient is available.  @kbd{C-c C-k} cancels a running read and
+@kbd{C-c C-e} shows its complete error.
+
+@node Safety
+@chapter Safety
+
+Kubect confirms apply, remote file changes, rollout restart, exec, and
+port forward operations.  Contexts matching @code{kubect-prod-context-regexp}
+are labelled as production contexts.  Set
+@code{kubect-confirm-mutating-commands} to nil only when another trusted policy
+layer provides equivalent protection.
+
+@node Configuration
+@chapter Configuration
+
+Customize the @code{kubect} group to change defaults.  Namespace completion is
+used when RBAC permits namespace listing.  Otherwise Kubect asks for a namespace
+name directly.  When working in a Tramp buffer, Kubect runs @code{kubectl} on
+the remote host; use a connection local setting for @code{kubect-kubectl-command}
+if that host needs a different executable path.
+
+@bye

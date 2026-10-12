@@ -1,0 +1,16 @@
+# Emacs build and editor state
+*.elc
+*.eln
+*.el~
+*~
+.#*
+\#*\#
+auto-save-list/
+tramp
+
+# Test and coverage artefacts
+coverage/
+*.coverage
+
+# Local Kubernetes/project configuration; it may contain environment details.
+.k8s-locals.el

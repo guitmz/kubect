@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        emacs_version: [27.1, 28.2, 29.4, 30.1]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: purcell/setup-emacs@v6
+        with:
+          version: ${{ matrix.emacs_version }}
+      - name: Run ERT suite
+        run: emacs -Q --batch -L . -L tests -l tests/run-tests.el
+      - name: Validate the Info manual source
+        run: >-
+          emacs -Q --batch --eval
+          "(progn (require 'texinfmt) (with-temp-buffer (insert-file-contents \"kubect.texi\") (texinfo-format-buffer)))"
+      - name: Check trailing whitespace and final newlines
+        run: |
+          ! git grep -nI '[[:blank:]]$'
+          python3 - <<'PY'
+          from pathlib import Path
+          bad = [str(p) for p in Path('.').rglob('*')
+                 if p.is_file() and '.git' not in p.parts
+                 and p.suffix in {'.el', '.md', '.yml', '.yaml', '.txt'}
+                 and not p.read_bytes().endswith(b'\n')]
+          if bad:
+              raise SystemExit('Missing final newline: ' + ', '.join(bad))
+          PY
