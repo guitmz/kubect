@@ -1,7 +1,7 @@
 # Contributing to Kubect
 
 Thanks for improving Kubect.  Keep changes small, text focused, and compatible
-with Emacs 27.1 and later.  Avoid adding required external packages.
+with Emacs 28.2 and later.  Avoid adding required external packages.
 
 ## Development
 

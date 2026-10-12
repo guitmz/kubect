@@ -34,7 +34,7 @@ and namespace, and confirms actions that change state or open connections.
 @node Installation
 @chapter Installation
 
-Kubect requires Emacs 27.1 or later and @code{kubectl}.  Add the package
+Kubect requires Emacs 28.2 or later and @code{kubectl}.  Add the package
 directory to @code{load-path}, then load it with @code{(require 'kubect)}.
 Bind @code{kubect-prefix-map} to a convenient key.
 

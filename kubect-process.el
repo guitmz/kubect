@@ -91,6 +91,10 @@ cluster.  `C-g' aborts it immediately and `kubect-command-timeout' bounds it."
                   (delete-process process))
                 ;; This yields to the command loop, so C-g remains immediate.
                 (accept-process-output process 0.05))
+              ;; A short-lived process can exit between `make-process' and the
+              ;; first `process-live-p' check.  Give Emacs one final chance to
+              ;; dispatch its queued stdout and stderr before reading buffers.
+              (accept-process-output process 0.05)
               (let ((stdout-text (with-current-buffer stdout (string-trim (buffer-string))))
                     (stderr-text (with-current-buffer stderr (string-trim (buffer-string)))))
                 (cond

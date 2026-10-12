@@ -16,7 +16,7 @@ cluster, namespace, project directory, or external Emacs package.
 
 ## Requirements
 
-- Emacs 27.1 or later.
+- Emacs 28.2 or later.
 - A `kubectl` executable on `exec-path` (customize `kubect-kubectl-command` if
   needed).
 - A working kubeconfig only when you run commands that query a cluster.
@@ -145,8 +145,7 @@ external packages:
 emacs -Q --batch -L . -L tests -l tests/run-tests.el
 ```
 
-CI covers Emacs 27.2, 28.2, 29.4, 30.2, and 31.1 on Linux. The package
-continues to support Emacs 27.1 and later.
+CI covers Emacs 28.2, 29.4, 30.2, and 31.1 on Linux.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for style, safety, and test guidance.
 The concise Info manual source is [kubect.texi](kubect.texi).

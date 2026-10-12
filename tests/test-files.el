@@ -86,9 +86,14 @@
     (should (equal (kubect--default-occur-regexp) "api-7f6d9"))))
 
 (ert-deftest kubect-open-registers-a-session-buffer ()
-  (let ((kubect--sessions nil))
+  (let ((kubect--sessions nil)
+        (kubect--project-state (make-hash-table :test #'equal)))
     (cl-letf (((symbol-function 'kubect-refresh) (lambda () nil))
-              ((symbol-function 'kubect--project-root) (lambda () "/tmp/project")))
+              ((symbol-function 'kubect--project-root) (lambda () "/tmp/project"))
+              ((symbol-function 'kubect-current-wide-p) (lambda () nil))
+              ((symbol-function 'kubect--kubectl-output)
+               (lambda (&rest _)
+                 (error "This test must not invoke kubectl"))))
       (let ((session (kubect-open "ctx" "ns" "pods")))
         (unwind-protect
             (progn

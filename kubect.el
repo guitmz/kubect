@@ -1,7 +1,7 @@
 ;;; kubect.el --- Kubernetes workflows inside Emacs -*- lexical-binding: t; -*-
 
 ;; Version: 0.1.0
-;; Package-Requires: ((emacs "27.1"))
+;; Package-Requires: ((emacs "28.2"))
 ;; Keywords: tools
 ;; Author: Guilherme Thomazi Bonicontro <thomazi@linux.com>
 ;; Maintainer: Guilherme Thomazi Bonicontro <thomazi@linux.com>
