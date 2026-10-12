@@ -54,8 +54,8 @@ With `use-package`:
 
 ```elisp
 (use-package kubect
-  :load-path "/path/to/kubect"
-  :bind ("C-c k" . kubect-prefix-map))
+  :vc (:url "https://github.com/guitmz/kubect"
+       :branch "main"))
 ```
 
 With Elpaca:
