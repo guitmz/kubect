@@ -70,6 +70,7 @@ cluster.  `C-g' aborts it immediately and `kubect-command-timeout' bounds it."
          (stdout (generate-new-buffer " *kubect stdout*"))
         (stderr (generate-new-buffer " *kubect stderr*"))
         (process nil)
+        (stderr-process nil)
         (deadline (+ (float-time) kubect-command-timeout))
         (timed-out nil))
     (if (and cached (< (- (float-time) (car cached)) kubect-read-cache-ttl))
@@ -83,7 +84,8 @@ cluster.  `C-g' aborts it immediately and `kubect-command-timeout' bounds it."
                                   :connection-type 'pipe
                                   :sentinel #'ignore
                                   :command (cons program args)))
-              (when-let* ((stderr-process (get-buffer-process stderr)))
+              (setq stderr-process (get-buffer-process stderr))
+              (when stderr-process
                 (set-process-sentinel stderr-process #'ignore))
               (while (process-live-p process)
                 (when (>= (float-time) deadline)
@@ -95,6 +97,13 @@ cluster.  `C-g' aborts it immediately and `kubect-command-timeout' bounds it."
               ;; first `process-live-p' check.  Give Emacs one final chance to
               ;; dispatch its queued stdout and stderr before reading buffers.
               (accept-process-output process 0.05)
+              ;; Emacs 29 can report the main process as exited before its
+              ;; separate stderr pipe has closed.  Drain that pipe too so a
+              ;; failed kubectl command always reports both streams.
+              (while (and stderr-process (process-live-p stderr-process))
+                (accept-process-output stderr-process 0.05))
+              (when stderr-process
+                (accept-process-output stderr-process 0.05))
               (let ((stdout-text (with-current-buffer stdout (string-trim (buffer-string))))
                     (stderr-text (with-current-buffer stderr (string-trim (buffer-string)))))
                 (cond
@@ -117,6 +126,8 @@ cluster.  `C-g' aborts it immediately and `kubect-command-timeout' bounds it."
            (signal 'quit nil))
           (error (signal (car err) (cdr err))))
       (when (and process (process-live-p process)) (delete-process process))
+      (when (and stderr-process (process-live-p stderr-process))
+        (delete-process stderr-process))
       (kill-buffer stdout)
       (kill-buffer stderr)))))
 
