@@ -10,11 +10,53 @@ cluster, namespace, project directory, or external Emacs package.
 
 This project was developed with AI assistance for tests, and documentation, with human review required for every change.
 
+## Feature showcase
+
+- **Browse every resource:** open any resource that `kubectl get` supports,
+  including custom resources.  Each text first session retains its context,
+  namespace, filters, sorting, marks, and command history.
+- **Work across clusters:** keep several independent sessions open, move
+  between contexts and namespaces, or inspect a resource across all namespaces
+  without Kubect selecting a scope for you.
+- **Investigate incidents:** move from a resource to manifests, describe
+  output, events, current or previous logs, restart window analysis, dependency
+  x rays, resource graphs, rollout state, and related resources.
+- **Inspect platform concerns:** use namespace, node capacity, network, RBAC,
+  policy guardrail, cost signal, and configured CRD reports.  Metrics server
+  and Prometheus reports remain optional.
+- **Make changes:** editable manifests offer `kubectl diff` before
+  apply.  Apply, exec, port-forwarding, rollout restarts, and remote file writes
+  require confirmation, with an additional safeguard for production contexts.
+- **Use remote hosts:** from Tramp, Kubect uses the remote
+  `kubectl`, so the remote host's kubeconfig and credentials stay in control.
+
+### Custom resources and CRD views
+
+The normal resource browser discovers listable resources with `kubectl
+api-resources`, so installed CRDs appear beside built in Kubernetes resources
+without package changes.  Use `C-c k b` and select the CRD by its resource
+name.
+
+For a repeatable, compact view, configure a name, resource, and `kubectl
+custom-columns` expression:
+
+```elisp
+(setq kubect-crd-views
+      '(("widgets"
+         :resource "widgets.example.io"
+         :columns "NAMESPACE:.metadata.namespace,NAME:.metadata.name,PHASE:.status.phase,AGE:.metadata.creationTimestamp")))
+```
+
+Run `M-x kubect-crd-view RET widgets RET` to open that view across all
+namespaces in the current context.  Add more entries to `kubect-crd-views` for
+other operators and APIs.  These views are read only and use the same explicit
+context handling as the rest of Kubect.
+
 ## Comparison
 
 - [Kubel](https://github.com/abrochard/kubel) provides a focused resource browser with per buffer context and namespace selection, while Kubect adds asynchronous reports, incident workflows, and mandatory confirmations for state changes and connection opening.
 - [kubernetes-el](https://github.com/kubernetes-el/kubernetes-el) provides a broad Kubernetes dashboard, while Kubect favors lightweight text buffers, literal `kubectl` commands, and independent per session workflows.
-- [Kubed](https://github.com/emacsmirror/kubed) is a rich integrated interface with extensive resource support and remote access, while Kubect stays intentionally compact and uses its existing `kubectl` command flow.
+- [Kubed](https://github.com/emacsmirror/kubed) offers a richer resource specific interface, while Kubect favors generic resource sessions, visible `kubectl` commands, and incident focused reports.
 
 ## Requirements
 
